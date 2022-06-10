@@ -1,0 +1,37 @@
+version: "3.7"
+
+services:
+
+  nginx:
+    image: dumptec/nginx:1.21.dev
+    hostname: webserver
+    container_name: nginx
+    working_dir: /app
+    user: dump
+    ports:
+        - "80:8080"
+        - "443:8443"
+    links:
+      - phpfpm
+    logging:
+        options:
+            max-size: "50m"
+            max-file: "3"
+    volumes:
+        - ./app:/app
+        - ./docker/site.conf:/opt/bitnami/nginx/conf/server_blocks/default.conf:ro
+
+  phpfpm:
+    image: dumptec/php-fpm:8.1-dev
+    container_name: phpfpm
+    working_dir: /app
+    extra_hosts:
+        - "host.docker.internal:host-gateway"
+    user: "dump"
+    restart: on-failure
+    logging:
+        options:
+            max-size: "50m"
+            max-file: "3"
+    volumes:
+        - ./app:/app
