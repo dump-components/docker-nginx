@@ -17,6 +17,10 @@ docker build -t dumptec/nginx:1.21.base -f Dockerfiles/base/Dockerfile.1.21.base
 
 # development
 docker build -t dumptec/nginx:1.21.dev -f Dockerfiles/dev/Dockerfile.1.21.dev ./Dockerfiles/dev/
+
+# production
+docker build -t dumptec/nginx:1.21 -f Dockerfiles/prod/Dockerfile.1.21 ./Dockerfiles/prod/
+
 ```
 
 ## Arquivos de configuração
