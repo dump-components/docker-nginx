@@ -1,0 +1,61 @@
+name: Publish Docker image
+
+on:
+  push:
+    tags:
+      - 'nginx-*.*' # nginx-1.25.2
+
+jobs:
+  push_to_registry:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Set env
+        run: |
+          echo "NGINX_VERSION=$(cut -d '/' -f 2 <<< "${GITHUB_REF#refs/*/}")" >> $GITHUB_ENV
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: dumptec/postgresql
+
+      - name: Build and push Docker image | BASE
+        uses: docker/build-push-action@v3
+        with:
+          context: ./Dockerfiles/${{ env.NGINX_VERSION }}/base/
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/nginx:base-${{ env.NGINX_VERSION }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and push Docker image | DEV
+        uses: docker/build-push-action@v3
+        with:
+          context: ./Dockerfiles/${{ env.NGINX_VERSION }}/dev/
+          push: true
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/nginx:dev-${{ env.NGINX_VERSION }}
+
+      - name: Build and push Docker image | PROD
+        uses: docker/build-push-action@v3
+        with:
+          context: ./Dockerfiles/${{ env.NGINX_VERSION }}/prod/
+          push: true
+          labels: prod-${{ steps.meta.outputs.labels }}
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/nginx:prod-${{ env.NGINX_VERSION }}
