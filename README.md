@@ -13,13 +13,13 @@ user: "dump"
 
 ```shell
 # base
-docker build -t dumptec/nginx:1.21.base -f Dockerfiles/base/Dockerfile.1.21.base ./Dockerfiles/base/
+docker build -t dumptec/nginx:base-1.25.2 -f Dockerfiles/1.25.2/base/Dockerfile ./Dockerfiles/1.25.2/base
 
 # development
-docker build -t dumptec/nginx:1.21.dev -f Dockerfiles/dev/Dockerfile.1.21.dev ./Dockerfiles/dev/
+docker build -t dumptec/nginx:dev-1.25.2 -f Dockerfiles/1.25.2/dev/Dockerfile ./Dockerfiles/1.25.2/dev/
 
 # production
-docker build -t dumptec/nginx:1.21 -f Dockerfiles/prod/Dockerfile.1.21 ./Dockerfiles/prod/
+docker build -t dumptec/nginx:1.25.2 -f Dockerfiles/1.25.2/prod/Dockerfile ./Dockerfiles/1.25.2/prod/
 
 ```
 
@@ -27,7 +27,7 @@ docker build -t dumptec/nginx:1.21 -f Dockerfiles/prod/Dockerfile.1.21 ./Dockerf
 
 > Os arquivos de configuração do host fica na pasta
 
-* /opt/bitnami/nginx/conf/server_blocks/
+* /etc/nginx/conf.d/
 
 ## Localhost green
 
