@@ -3,7 +3,7 @@ name: Publish Docker image
 on:
   push:
     tags:
-      - 'nginx-*.*' # nginx-1.25.2
+      - '*.*' # 1.25.2
 
 jobs:
   push_to_registry:
