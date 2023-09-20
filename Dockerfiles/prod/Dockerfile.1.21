@@ -1,4 +1,0 @@
-FROM dumptec/nginx:1.21.base
-
-## Copy ssl
-COPY --chown=dump:dump ./data/prod.conf /opt/bitnami/nginx/conf/server_blocks/default.conf
